@@ -1,8 +1,16 @@
 {
     "name": "@arijitgupta/geo-distance",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "description": "Calculate geographic distances between coordinates.",
     "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ArijitGupta-in/geo-distance.git"
+    },
+    "homepage": "https://github.com/ArijitGupta-in/geo-distance",
+    "bugs": {
+        "url": "https://github.com/ArijitGupta-in/geo-distance/issues"
+    },
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
