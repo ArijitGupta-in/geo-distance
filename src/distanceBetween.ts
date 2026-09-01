@@ -1,6 +1,8 @@
+import type { Coordinate } from "./Coordinate.js";
+
 export function distanceBetween(
-    from: { latitude: number; longitude: number },
-    to: { latitude: number; longitude: number }
+    from: Coordinate,
+    to: Coordinate
 ): number {
     const earthRadius = 6_371_000;
 

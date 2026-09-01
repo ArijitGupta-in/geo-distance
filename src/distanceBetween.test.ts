@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { distanceBetween } from "./distanceBetween";
+import { distanceBetween } from "./distanceBetween.js";
 
 describe("distanceBetween", () => {
     it("returns zero for identical coordinates", () => {
