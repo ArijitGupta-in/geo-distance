@@ -1,9 +1,15 @@
 import type { Coordinate } from "./Coordinate.js";
 
-export function distanceBetween(
-    from: Coordinate,
-    to: Coordinate
-): number {
+/**
+ * Calculates the distance between two geographic coordinates in meters.
+ *
+ * Uses the haversine formula to estimate the great-circle distance on Earth.
+ *
+ * @param from - The starting coordinate.
+ * @param to - The destination coordinate.
+ * @returns The distance between the coordinates in meters.
+ */
+export function distanceBetween(from: Coordinate, to: Coordinate): number {
     const earthRadius = 6_371_000;
 
     const latitudeDifference = (to.latitude - from.latitude) * (Math.PI / 180);
