@@ -1,15 +1,29 @@
 {
-  "name": "geo-distance",
+  "name": "@arijitgupta/geo-distance",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "description": "Calculate geographic distances between coordinates.",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "geolocation",
+    "geo",
+    "distance",
+    "geospatial",
+    "coordinates",
+    "latitude",
+    "longitude"
+  ],
+  "author": "Arijit Gupta",
+  "license": "MIT",
   "devDependencies": {
     "typescript": "^7.0.2",
     "vitest": "^4.1.11"
