@@ -1,6 +1,6 @@
 # @arijitgupta/geo-distance
 
-A small TypeScript utility for calculating the distance between two geographic coordinates.
+A lightweight TypeScript utility for estimating the distance between two geographic coordinates using the Haversine formula.
 
 ## Installation
 
@@ -34,21 +34,25 @@ const from: Coordinate = { latitude: 0, longitude: 0 };
 const to: Coordinate = { latitude: 0, longitude: 1 };
 
 const distanceInMeters: number = distanceBetween(from, to);
+console.log(distanceInMeters); // ~111,195 meters
 ```
 
 ## API
 
 ### `distanceBetween(from, to)`
 
-Calculates the distance between two coordinates and returns the result in meters.
+Returns the estimated distance between two coordinates in meters.
+
+Parameters:
 
 - `from: Coordinate` — starting coordinate.
 - `to: Coordinate` — destination coordinate.
-- Returns `number` — distance in meters.
+
+Returns:
+
+- `number` — the distance in meters.
 
 ### `Coordinate`
-
-An object with geographic coordinates expressed in degrees:
 
 ```ts
 interface Coordinate {
@@ -57,11 +61,18 @@ interface Coordinate {
 }
 ```
 
-Latitude is expected to range from `-90` to `90`, and longitude from `-180` to `180`.
+Latitude should be in the range `-90` to `90`, and longitude should be in the range `-180` to `180`.
 
-## Units and behavior
+## Behavior
 
-`distanceBetween` returns meters. It uses the Haversine formula to estimate great-circle distance on Earth, using a fixed Earth radius of 6,371,000 meters. The package does not provide unit-conversion options or runtime coordinate validation.
+- Uses the Haversine formula to calculate the great-circle distance between two points on Earth.
+- Returns a result in meters.
+- Uses a fixed Earth radius of `6_371_000` meters.
+- Does not perform runtime validation or convert between units.
+
+## Notes
+
+This package is intentionally small and dependency-free. It is designed for straightforward geographic distance calculations in JavaScript and TypeScript applications.
 
 ## Development
 
@@ -74,4 +85,4 @@ npm run build
 
 ## License
 
-MIT License.
+MIT
