@@ -1,13 +1,22 @@
 import type { Coordinate } from "./Coordinate.js";
 
 /**
- * Calculates the distance between two geographic coordinates in meters.
+ * Estimates the great-circle distance between two geographic coordinates in meters.
  *
- * Uses the haversine formula to estimate the great-circle distance on Earth.
+ * Uses the Haversine formula with a fixed Earth radius of 6,371,000 m (mean spherical radius).
+ * Accurate to within ~0.5% for most distances; error increases at high latitudes due to
+ * Earth's oblate shape.
  *
  * @param from - The starting coordinate.
  * @param to - The destination coordinate.
- * @returns The distance between the coordinates in meters.
+ * @returns The estimated distance between the two coordinates, in meters.
+ *
+ * @example
+ * ```ts
+ * const from: Coordinate = { latitude: 0, longitude: 0 };
+ * const to: Coordinate = { latitude: 0, longitude: 1 };
+ * distanceBetween(from, to); // ~111,195 meters
+ * ```
  */
 export function distanceBetween(from: Coordinate, to: Coordinate): number {
     const earthRadius = 6_371_000;
