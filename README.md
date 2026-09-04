@@ -1,6 +1,10 @@
 # @arijitgupta/geo-distance
 
-A lightweight TypeScript utility for estimating the distance between two geographic coordinates using the Haversine formula.
+[![npm version](https://img.shields.io/npm/v/@arijitgupta/geo-distance)](https://www.npmjs.com/package/@arijitgupta/geo-distance)
+[![license](https://img.shields.io/npm/l/@arijitgupta/geo-distance)](https://opensource.org/licenses/MIT)
+
+A lightweight, dependency-free TypeScript utility for estimating the great-circle distance between two
+geographic coordinates using the Haversine formula.
 
 ## Installation
 
@@ -19,7 +23,7 @@ const kolkata = { latitude: 22.5726, longitude: 88.3639 };
 const nearbyPoint = { latitude: 22.5736, longitude: 88.3649 };
 
 const distanceInMeters = distanceBetween(kolkata, nearbyPoint);
-console.log(distanceInMeters);
+console.log(distanceInMeters); // ~151 meters
 ```
 
 ### TypeScript
@@ -41,46 +45,39 @@ console.log(distanceInMeters); // ~111,195 meters
 
 ### `distanceBetween(from, to)`
 
-Returns the estimated distance between two coordinates in meters.
+Returns the estimated great-circle distance between two coordinates in meters.
 
-Parameters:
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `from` | `Coordinate` | Starting coordinate |
+| `to` | `Coordinate` | Destination coordinate |
 
-- `from: Coordinate` — starting coordinate.
-- `to: Coordinate` — destination coordinate.
-
-Returns:
-
-- `number` — the distance in meters.
+**Returns:** `number` — distance in meters.
 
 ### `Coordinate`
 
 ```ts
 interface Coordinate {
-    latitude: number;
-    longitude: number;
+    latitude: number;   // -90 to 90
+    longitude: number;  // -180 to 180
 }
 ```
 
-Latitude should be in the range `-90` to `90`, and longitude should be in the range `-180` to `180`.
-
 ## Behavior
 
-- Uses the Haversine formula to calculate the great-circle distance between two points on Earth.
-- Returns a result in meters.
-- Uses a fixed Earth radius of `6_371_000` meters.
-- Does not perform runtime validation or convert between units.
-
-## Notes
-
-This package is intentionally small and dependency-free. It is designed for straightforward geographic distance calculations in JavaScript and TypeScript applications.
+- Uses the Haversine formula to compute the great-circle distance between two points on Earth.
+- Returns a result in meters, using a fixed Earth radius of `6,371,000` meters.
+- Accurate to within ~0.5% for most distances. Error increases at high latitudes due to Earth's oblate shape.
+- Does not perform input validation or unit conversion.
+- Has no runtime dependencies.
 
 ## Development
 
 ```bash
-npm install
-npm test
-npm run check
-npm run build
+npm install       # install dev dependencies
+npm test          # run tests with Vitest
+npm run check     # type-check without emitting output
+npm run build     # compile TypeScript to dist/
 ```
 
 ## License
