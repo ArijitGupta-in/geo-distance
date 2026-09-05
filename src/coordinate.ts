@@ -1,5 +1,23 @@
 import type { Coordinate, LatitudeDMS, LongitudeDMS, DMSCoordinate } from "./types.js";
 
+/**
+ * Validates a decimal-degree {@link Coordinate}.
+ *
+ * @throws {RangeError} If latitude is outside [-90, 90] or longitude is outside [-180, 180].
+ */
+export function validateCoordinate(coord: Coordinate): void {
+    if (!Number.isFinite(coord.latitude) || coord.latitude < -90 || coord.latitude > 90) {
+        throw new RangeError(
+            `Latitude must be between -90 and 90, got ${coord.latitude}`
+        );
+    }
+    if (!Number.isFinite(coord.longitude) || coord.longitude < -180 || coord.longitude > 180) {
+        throw new RangeError(
+            `Longitude must be between -180 and 180, got ${coord.longitude}`
+        );
+    }
+}
+
 function validateMinutes(minutes: number): void {
     if (!Number.isFinite(minutes) || minutes < 0 || minutes >= 60) {
         throw new RangeError(`Minutes must be within 0–59, got ${minutes}`);
