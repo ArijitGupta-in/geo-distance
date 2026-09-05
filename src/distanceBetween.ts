@@ -1,5 +1,12 @@
-import type { Coordinate, DMSCoordinate } from "./types.js";
+import type { Coordinate, DMSCoordinate, DistanceUnit } from "./types.js";
 import { dmsToDecimal } from "./dms.js";
+
+const METERS_PER: Record<DistanceUnit, number> = {
+    meters: 1,
+    kilometers: 1e-3,
+    miles: 1 / 1609.344,
+    feet: 1 / 0.3048,
+};
 
 function isDMSCoordinate(coord: Coordinate | DMSCoordinate): coord is DMSCoordinate {
     return typeof coord.latitude === "object";
@@ -21,14 +28,19 @@ function normalize(coord: Coordinate | DMSCoordinate): Coordinate {
  *
  * @param from - The starting coordinate.
  * @param to - The destination coordinate.
- * @returns The estimated distance between the two coordinates, in meters.
+ * @param unit - The unit for the returned distance. Defaults to `"meters"`.
+ * @returns The estimated distance between the two coordinates in the requested unit.
+ * @throws {TypeError} If `unit` is not a supported {@link DistanceUnit}.
  *
  * @example
  * ```ts
- * // Decimal degrees
+ * // Decimal degrees — default meters
  * const from: Coordinate = { latitude: 0, longitude: 0 };
  * const to: Coordinate = { latitude: 0, longitude: 1 };
- * distanceBetween(from, to); // ~111,195 meters
+ * distanceBetween(from, to);               // ~111,195 meters
+ * distanceBetween(from, to, "kilometers"); // ~111.195 km
+ * distanceBetween(from, to, "miles");      // ~69.11 miles
+ * distanceBetween(from, to, "feet");       // ~364,879 feet
  * ```
  *
  * @example
@@ -43,8 +55,13 @@ function normalize(coord: Coordinate | DMSCoordinate): Coordinate {
  */
 export function distanceBetween(
     from: Coordinate | DMSCoordinate,
-    to: Coordinate | DMSCoordinate
+    to: Coordinate | DMSCoordinate,
+    unit: DistanceUnit = "meters"
 ): number {
+    if (!(unit in METERS_PER)) {
+        throw new TypeError(`Unsupported distance unit: "${unit}"`);
+    }
+
     const a = normalize(from);
     const b = normalize(to);
 
@@ -65,5 +82,5 @@ export function distanceBetween(
     const angularDistance =
         2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
 
-    return earthRadius * angularDistance;
+    return earthRadius * angularDistance * METERS_PER[unit];
 }
