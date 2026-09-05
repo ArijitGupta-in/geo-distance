@@ -87,14 +87,17 @@ Returns the estimated great-circle distance between two coordinates.
 
 **Returns:** `number` — distance in the requested unit.
 
-**Throws:** `RangeError` if a coordinate component is out of range (latitude ∉ [-90, 90], longitude ∉ [-180, 180], or any DMS component is invalid).  
+**Throws:** `RangeError` if a coordinate component is invalid (including non-finite
+decimal values, latitude outside `[-90, 90]`, longitude outside `[-180, 180]`, or
+an invalid DMS component).  
 **Throws:** `TypeError` if `unit` is not a supported `DistanceUnit`.
 
 ### `validateCoordinate(coord)`
 
 Validates a decimal-degree `Coordinate`. Useful for checking inputs before passing them to `distanceBetween`.
 
-**Throws:** `RangeError` if `latitude` is outside `[-90, 90]` or `longitude` is outside `[-180, 180]`.
+**Throws:** `RangeError` if `latitude` or `longitude` is outside its valid range, or
+if either value is not finite.
 
 ### `dmsToDecimal(dms)`
 
@@ -144,7 +147,8 @@ interface LongitudeDMS {
 ## Behavior
 
 - Uses the Haversine formula to compute the great-circle distance between two points on Earth.
-- Returns a result in meters, using a fixed Earth radius of `6,371,000` meters.
+- Returns a result in the requested unit, using meters by default and a fixed Earth
+    radius of `6,371,000` meters.
 - Accurate to within ~0.5% for most distances. Error increases at high latitudes due to Earth's oblate shape.
 - DMS coordinates are normalized to decimal degrees before the distance calculation.
 - Has no runtime dependencies.

@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [Unreleased]
+## [1.1.0] — 2026-09-05
 
 ### Added
 
@@ -42,5 +42,5 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `exports` field in `package.json` for subpath resolution.
 - `prepublishOnly` script to type-check, test, and build before publishing.
 
-[Unreleased]: https://github.com/ArijitGupta-in/geo-distance/compare/v1.0.1...HEAD
+[1.1.0]: https://github.com/ArijitGupta-in/geo-distance/releases/tag/v1.1.0
 [1.0.1]: https://github.com/ArijitGupta-in/geo-distance/releases/tag/v1.0.1
