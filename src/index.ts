@@ -11,6 +11,7 @@ export type {
     LongitudeDMS,
     LatitudeDirection,
     LongitudeDirection,
+    DistanceUnit,
 } from "./types.js";
 export { distanceBetween } from "./distanceBetween.js";
 export { dmsToDecimal } from "./dms.js";
