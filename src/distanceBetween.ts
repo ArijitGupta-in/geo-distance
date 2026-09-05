@@ -1,6 +1,5 @@
-import type { Coordinate } from "./Coordinate.js";
-import type { DMSCoordinate } from "./DMSCoordinate.js";
-import { dmsToDecimal } from "./DMSCoordinate.js";
+import type { Coordinate, DMSCoordinate } from "./types.js";
+import { dmsToDecimal } from "./dms.js";
 
 function isDMSCoordinate(coord: Coordinate | DMSCoordinate): coord is DMSCoordinate {
     return typeof coord.latitude === "object";
