@@ -27,8 +27,10 @@ import {
 const from: Coordinate = { latitude: 0, longitude: 0 };
 const to: Coordinate = { latitude: 0, longitude: 1 };
 
-const distanceInMeters: number = distanceBetween(from, to);
-console.log(distanceInMeters); // ~111,195 meters
+distanceBetween(from, to);               // ~111,195 meters (default)
+distanceBetween(from, to, "kilometers"); // ~111.195 km
+distanceBetween(from, to, "miles");      // ~69.09 miles
+distanceBetween(from, to, "feet");       // ~364,813 feet
 ```
 
 ### DMS coordinates
@@ -71,18 +73,22 @@ const decimal = dmsToDecimal(dms);
 
 ## API
 
-### `distanceBetween(from, to)`
+### `distanceBetween(from, to, unit?)`
 
-Returns the estimated great-circle distance between two coordinates in meters.
+Returns the estimated great-circle distance between two coordinates.
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| `from` | `Coordinate \| DMSCoordinate` | Starting coordinate |
-| `to` | `Coordinate \| DMSCoordinate` | Destination coordinate |
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `from` | `Coordinate \| DMSCoordinate` | — | Starting coordinate |
+| `to` | `Coordinate \| DMSCoordinate` | — | Destination coordinate |
+| `unit` | `DistanceUnit` | `"meters"` | Output unit |
 
-**Returns:** `number` — distance in meters.
+**`DistanceUnit`:** `"meters"` \| `"kilometers"` \| `"miles"` \| `"feet"`
 
-**Throws:** `RangeError` if a DMS component is out of range.
+**Returns:** `number` — distance in the requested unit.
+
+**Throws:** `RangeError` if a DMS component is out of range.  
+**Throws:** `TypeError` if `unit` is not a supported `DistanceUnit`.
 
 ### `dmsToDecimal(dms)`
 
