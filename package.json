@@ -1,6 +1,6 @@
 {
     "name": "@arijitgupta/geo-distance",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Estimate great-circle distances between geographic coordinates in meters, kilometers, miles, or feet using the Haversine formula, with decimal-degree and DMS support.",
     "type": "module",
     "repository": {
