@@ -4,13 +4,13 @@
  * Exports the {@link distanceBetween} function and both coordinate types:
  * {@link Coordinate} (decimal degrees) and {@link DMSCoordinate} (DMS format).
  */
-export type { Coordinate } from "./Coordinate.js";
 export type {
+    Coordinate,
     DMSCoordinate,
     LatitudeDMS,
     LongitudeDMS,
     LatitudeDirection,
     LongitudeDirection,
-} from "./DMSCoordinate.js";
+} from "./types.js";
 export { distanceBetween } from "./distanceBetween.js";
-export { dmsToDecimal } from "./DMSCoordinate.js";
+export { dmsToDecimal } from "./dms.js";
