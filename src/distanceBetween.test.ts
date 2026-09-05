@@ -2,6 +2,10 @@ import { describe, expect, it } from "vitest";
 import type { DMSCoordinate } from "./index.js";
 import { distanceBetween } from "./index.js";
 
+// One degree of longitude at the equator — used as a stable reference distance.
+const equatorA = { latitude: 0, longitude: 0 };
+const equatorB = { latitude: 0, longitude: 1 };
+
 describe("distanceBetween", () => {
     it("returns zero for identical coordinates", () => {
         const coordinate = {
@@ -119,5 +123,64 @@ describe("distanceBetween with DMS coordinates", () => {
         };
 
         expect(() => distanceBetween(invalid, kolkataDMS)).toThrow(RangeError);
+    });
+});
+
+describe("distanceBetween unit parameter", () => {
+    it("defaults to meters when no unit is given", () => {
+        expect(distanceBetween(equatorA, equatorB)).toBeCloseTo(111_195, -1);
+    });
+
+    it("returns meters when unit is 'meters'", () => {
+        expect(distanceBetween(equatorA, equatorB, "meters")).toBeCloseTo(111_195, -1);
+    });
+
+    it("returns kilometers when unit is 'kilometers'", () => {
+        expect(distanceBetween(equatorA, equatorB, "kilometers")).toBeCloseTo(111.195, 0);
+    });
+
+    it("returns miles when unit is 'miles'", () => {
+        expect(distanceBetween(equatorA, equatorB, "miles")).toBeCloseTo(69.093, 2);
+    });
+
+    it("returns feet when unit is 'feet'", () => {
+        expect(distanceBetween(equatorA, equatorB, "feet")).toBeCloseTo(364_813, -1);
+    });
+
+    it("kilometers result equals meters result divided by 1000", () => {
+        const meters = distanceBetween(equatorA, equatorB, "meters");
+        const km = distanceBetween(equatorA, equatorB, "kilometers");
+        expect(km).toBeCloseTo(meters / 1000, 10);
+    });
+
+    it("miles result equals meters result divided by 1609.344", () => {
+        const meters = distanceBetween(equatorA, equatorB, "meters");
+        const miles = distanceBetween(equatorA, equatorB, "miles");
+        expect(miles).toBeCloseTo(meters / 1609.344, 10);
+    });
+
+    it("feet result equals meters result divided by 0.3048", () => {
+        const meters = distanceBetween(equatorA, equatorB, "meters");
+        const feet = distanceBetween(equatorA, equatorB, "feet");
+        expect(feet).toBeCloseTo(meters / 0.3048, 8);
+    });
+
+    it("returns zero in any unit for identical coordinates", () => {
+        const point = { latitude: 22.5726, longitude: 88.3639 };
+        expect(distanceBetween(point, point, "kilometers")).toBe(0);
+        expect(distanceBetween(point, point, "miles")).toBe(0);
+        expect(distanceBetween(point, point, "feet")).toBe(0);
+    });
+
+    it("throws TypeError for an unsupported unit", () => {
+        expect(() =>
+            distanceBetween(equatorA, equatorB, "yards" as never)
+        ).toThrow(TypeError);
+    });
+
+    it("TypeError message names the bad unit", () => {
+        expect(() =>
+            distanceBetween(equatorA, equatorB, "nautical-miles" as never)
+        ).toThrow(/nautical-miles/);
     });
 });
