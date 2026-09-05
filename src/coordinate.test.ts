@@ -1,9 +1,58 @@
 import { describe, expect, it } from "vitest";
 import {
+    validateCoordinate,
     dmsToDecimal,
     latitudeDMSToDecimal,
     longitudeDMSToDecimal,
-} from "./dms.js";
+} from "./coordinate.js";
+
+describe("validateCoordinate", () => {
+    it("accepts valid coordinates at the origin", () => {
+        expect(() => validateCoordinate({ latitude: 0, longitude: 0 })).not.toThrow();
+    });
+
+    it("accepts boundary latitude +90", () => {
+        expect(() => validateCoordinate({ latitude: 90, longitude: 0 })).not.toThrow();
+    });
+
+    it("accepts boundary latitude -90", () => {
+        expect(() => validateCoordinate({ latitude: -90, longitude: 0 })).not.toThrow();
+    });
+
+    it("accepts boundary longitude +180", () => {
+        expect(() => validateCoordinate({ latitude: 0, longitude: 180 })).not.toThrow();
+    });
+
+    it("accepts boundary longitude -180", () => {
+        expect(() => validateCoordinate({ latitude: 0, longitude: -180 })).not.toThrow();
+    });
+
+    it("throws RangeError for latitude above 90", () => {
+        expect(() => validateCoordinate({ latitude: 91, longitude: 0 })).toThrow(RangeError);
+    });
+
+    it("throws RangeError for latitude below -90", () => {
+        expect(() => validateCoordinate({ latitude: -91, longitude: 0 })).toThrow(RangeError);
+    });
+
+    it("throws RangeError for longitude above 180", () => {
+        expect(() => validateCoordinate({ latitude: 0, longitude: 181 })).toThrow(RangeError);
+    });
+
+    it("throws RangeError for longitude below -180", () => {
+        expect(() => validateCoordinate({ latitude: 0, longitude: -181 })).toThrow(RangeError);
+    });
+
+    it("throws RangeError for non-finite latitude", () => {
+        expect(() => validateCoordinate({ latitude: Infinity, longitude: 0 })).toThrow(RangeError);
+        expect(() => validateCoordinate({ latitude: NaN, longitude: 0 })).toThrow(RangeError);
+    });
+
+    it("throws RangeError for non-finite longitude", () => {
+        expect(() => validateCoordinate({ latitude: 0, longitude: Infinity })).toThrow(RangeError);
+        expect(() => validateCoordinate({ latitude: 0, longitude: NaN })).toThrow(RangeError);
+    });
+});
 
 describe("latitudeDMSToDecimal", () => {
     it("converts North to a positive decimal", () => {
