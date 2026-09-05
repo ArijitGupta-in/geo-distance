@@ -8,7 +8,9 @@ const METERS_PER: Record<DistanceUnit, number> = {
     feet: 1 / 0.3048,
 };
 
-function isDMSCoordinate(coord: Coordinate | DMSCoordinate): coord is DMSCoordinate {
+function isDMSCoordinate(
+    coord: Coordinate | DMSCoordinate
+): coord is DMSCoordinate {
     return typeof coord.latitude === "object";
 }
 

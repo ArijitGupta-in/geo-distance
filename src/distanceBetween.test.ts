@@ -63,8 +63,18 @@ describe("distanceBetween with DMS coordinates", () => {
 
     it("calculates a positive distance between two DMS coordinates", () => {
         const nearbyDMS: DMSCoordinate = {
-            latitude: { degrees: 22, minutes: 34, seconds: 57.6, direction: "N" },
-            longitude: { degrees: 88, minutes: 21, seconds: 53.64, direction: "E" },
+            latitude: {
+                degrees: 22,
+                minutes: 34,
+                seconds: 57.6,
+                direction: "N",
+            },
+            longitude: {
+                degrees: 88,
+                minutes: 21,
+                seconds: 53.64,
+                direction: "E",
+            },
         };
 
         expect(distanceBetween(kolkataDMS, nearbyDMS)).toBeGreaterThan(0);
@@ -80,12 +90,20 @@ describe("distanceBetween with DMS coordinates", () => {
     it("produces equivalent distances when mixing DMS and decimal formats for the same locations", () => {
         const destination: DMSCoordinate = {
             latitude: { degrees: 28, minutes: 38, seconds: 12, direction: "N" },
-            longitude: { degrees: 77, minutes: 13, seconds: 8.04, direction: "E" },
+            longitude: {
+                degrees: 77,
+                minutes: 13,
+                seconds: 8.04,
+                direction: "E",
+            },
         };
         const destinationDecimal = { latitude: 28.6367, longitude: 77.2189 };
 
         const distanceDMS = distanceBetween(kolkataDMS, destination);
-        const distanceDecimal = distanceBetween(kolkataDecimal, destinationDecimal);
+        const distanceDecimal = distanceBetween(
+            kolkataDecimal,
+            destinationDecimal
+        );
 
         expect(distanceDMS).toBeCloseTo(distanceDecimal, -1);
     });
@@ -93,11 +111,21 @@ describe("distanceBetween with DMS coordinates", () => {
     it("handles coordinates in the southern hemisphere", () => {
         const sydney: DMSCoordinate = {
             latitude: { degrees: 33, minutes: 51, seconds: 54, direction: "S" },
-            longitude: { degrees: 151, minutes: 12, seconds: 34, direction: "E" },
+            longitude: {
+                degrees: 151,
+                minutes: 12,
+                seconds: 34,
+                direction: "E",
+            },
         };
         const melbourne: DMSCoordinate = {
             latitude: { degrees: 37, minutes: 48, seconds: 49, direction: "S" },
-            longitude: { degrees: 144, minutes: 57, seconds: 47, direction: "E" },
+            longitude: {
+                degrees: 144,
+                minutes: 57,
+                seconds: 47,
+                direction: "E",
+            },
         };
 
         expect(distanceBetween(sydney, melbourne)).toBeGreaterThan(0);
@@ -110,7 +138,12 @@ describe("distanceBetween with DMS coordinates", () => {
         };
         const losAngeles: DMSCoordinate = {
             latitude: { degrees: 34, minutes: 3, seconds: 8, direction: "N" },
-            longitude: { degrees: 118, minutes: 14, seconds: 37, direction: "W" },
+            longitude: {
+                degrees: 118,
+                minutes: 14,
+                seconds: 37,
+                direction: "W",
+            },
         };
 
         expect(distanceBetween(newYork, losAngeles)).toBeGreaterThan(3_000_000);
@@ -118,8 +151,18 @@ describe("distanceBetween with DMS coordinates", () => {
 
     it("throws when given invalid DMS coordinates", () => {
         const invalid = {
-            latitude: { degrees: 91, minutes: 0, seconds: 0, direction: "N" as const },
-            longitude: { degrees: 0, minutes: 0, seconds: 0, direction: "E" as const },
+            latitude: {
+                degrees: 91,
+                minutes: 0,
+                seconds: 0,
+                direction: "N" as const,
+            },
+            longitude: {
+                degrees: 0,
+                minutes: 0,
+                seconds: 0,
+                direction: "E" as const,
+            },
         };
 
         expect(() => distanceBetween(invalid, kolkataDMS)).toThrow(RangeError);
@@ -132,19 +175,31 @@ describe("distanceBetween unit parameter", () => {
     });
 
     it("returns meters when unit is 'meters'", () => {
-        expect(distanceBetween(equatorA, equatorB, "meters")).toBeCloseTo(111_195, -1);
+        expect(distanceBetween(equatorA, equatorB, "meters")).toBeCloseTo(
+            111_195,
+            -1
+        );
     });
 
     it("returns kilometers when unit is 'kilometers'", () => {
-        expect(distanceBetween(equatorA, equatorB, "kilometers")).toBeCloseTo(111.195, 0);
+        expect(distanceBetween(equatorA, equatorB, "kilometers")).toBeCloseTo(
+            111.195,
+            0
+        );
     });
 
     it("returns miles when unit is 'miles'", () => {
-        expect(distanceBetween(equatorA, equatorB, "miles")).toBeCloseTo(69.093, 2);
+        expect(distanceBetween(equatorA, equatorB, "miles")).toBeCloseTo(
+            69.093,
+            2
+        );
     });
 
     it("returns feet when unit is 'feet'", () => {
-        expect(distanceBetween(equatorA, equatorB, "feet")).toBeCloseTo(364_813, -1);
+        expect(distanceBetween(equatorA, equatorB, "feet")).toBeCloseTo(
+            364_813,
+            -1
+        );
     });
 
     it("kilometers result equals meters result divided by 1000", () => {

@@ -1,4 +1,9 @@
-import type { Coordinate, LatitudeDMS, LongitudeDMS, DMSCoordinate } from "./types.js";
+import type {
+    Coordinate,
+    LatitudeDMS,
+    LongitudeDMS,
+    DMSCoordinate,
+} from "./types.js";
 
 /**
  * Validates a decimal-degree {@link Coordinate}.
@@ -6,12 +11,20 @@ import type { Coordinate, LatitudeDMS, LongitudeDMS, DMSCoordinate } from "./typ
  * @throws {RangeError} If latitude is outside [-90, 90] or longitude is outside [-180, 180].
  */
 export function validateCoordinate(coord: Coordinate): void {
-    if (!Number.isFinite(coord.latitude) || coord.latitude < -90 || coord.latitude > 90) {
+    if (
+        !Number.isFinite(coord.latitude) ||
+        coord.latitude < -90 ||
+        coord.latitude > 90
+    ) {
         throw new RangeError(
             `Latitude must be between -90 and 90, got ${coord.latitude}`
         );
     }
-    if (!Number.isFinite(coord.longitude) || coord.longitude < -180 || coord.longitude > 180) {
+    if (
+        !Number.isFinite(coord.longitude) ||
+        coord.longitude < -180 ||
+        coord.longitude > 180
+    ) {
         throw new RangeError(
             `Longitude must be between -180 and 180, got ${coord.longitude}`
         );
@@ -41,7 +54,9 @@ function validateLatitudeDMS(lat: LatitudeDMS): void {
 
     const decimal = lat.degrees + lat.minutes / 60 + lat.seconds / 3600;
     if (decimal > 90) {
-        throw new RangeError(`Latitude must remain within ±90°, computed ${decimal}°`);
+        throw new RangeError(
+            `Latitude must remain within ±90°, computed ${decimal}°`
+        );
     }
 }
 
@@ -56,7 +71,9 @@ function validateLongitudeDMS(lon: LongitudeDMS): void {
 
     const decimal = lon.degrees + lon.minutes / 60 + lon.seconds / 3600;
     if (decimal > 180) {
-        throw new RangeError(`Longitude must remain within ±180°, computed ${decimal}°`);
+        throw new RangeError(
+            `Longitude must remain within ±180°, computed ${decimal}°`
+        );
     }
 }
 
