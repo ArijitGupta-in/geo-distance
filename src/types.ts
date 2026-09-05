@@ -35,3 +35,6 @@ export interface DMSCoordinate {
     latitude: LatitudeDMS;
     longitude: LongitudeDMS;
 }
+
+/** Supported units for distance output from distanceBetween. */
+export type DistanceUnit = "meters" | "kilometers" | "miles" | "feet";
