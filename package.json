@@ -1,7 +1,7 @@
 {
     "name": "@arijitgupta/geo-distance",
     "version": "1.0.1",
-    "description": "Calculate geographic distances between coordinates.",
+    "description": "Estimate great-circle distances between geographic coordinates in meters, kilometers, miles, or feet using the Haversine formula, with decimal-degree and DMS support.",
     "type": "module",
     "repository": {
         "type": "git",
@@ -33,7 +33,16 @@
         "geospatial",
         "distance",
         "coordinates",
-        "haversine"
+        "haversine",
+        "great-circle",
+        "latitude",
+        "longitude",
+        "dms",
+        "geography",
+        "kilometers",
+        "miles",
+        "feet",
+        "distance-conversion"
     ],
     "author": "Arijit Gupta",
     "license": "MIT",
