@@ -87,12 +87,18 @@ Returns the estimated great-circle distance between two coordinates.
 
 **Returns:** `number` — distance in the requested unit.
 
-**Throws:** `RangeError` if a DMS component is out of range.  
+**Throws:** `RangeError` if a coordinate component is out of range (latitude ∉ [-90, 90], longitude ∉ [-180, 180], or any DMS component is invalid).  
 **Throws:** `TypeError` if `unit` is not a supported `DistanceUnit`.
+
+### `validateCoordinate(coord)`
+
+Validates a decimal-degree `Coordinate`. Useful for checking inputs before passing them to `distanceBetween`.
+
+**Throws:** `RangeError` if `latitude` is outside `[-90, 90]` or `longitude` is outside `[-180, 180]`.
 
 ### `dmsToDecimal(dms)`
 
-Converts a `DMSCoordinate` to a decimal-degree coordinate object.
+Converts a `DMSCoordinate` to a decimal-degree `Coordinate`.
 
 **Throws:** `RangeError` if any DMS component is out of range.
 
