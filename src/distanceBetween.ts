@@ -1,5 +1,5 @@
 import type { Coordinate, DMSCoordinate, DistanceUnit } from "./types.js";
-import { dmsToDecimal } from "./dms.js";
+import { dmsToDecimal } from "./coordinate.js";
 
 const METERS_PER: Record<DistanceUnit, number> = {
     meters: 1,
@@ -8,7 +8,9 @@ const METERS_PER: Record<DistanceUnit, number> = {
     feet: 1 / 0.3048,
 };
 
-function isDMSCoordinate(coord: Coordinate | DMSCoordinate): coord is DMSCoordinate {
+function isDMSCoordinate(
+    coord: Coordinate | DMSCoordinate
+): coord is DMSCoordinate {
     return typeof coord.latitude === "object";
 }
 
