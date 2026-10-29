@@ -101,14 +101,18 @@ or if a decimal coordinate value is not finite.
 
 Validates a decimal-degree `Coordinate`. Useful for checking inputs before passing them to `distanceBetween`.
 
-**Throws:** `RangeError` if `latitude` or `longitude` is outside its valid range, or
+**Throws:** `RangeError` if `latitude` or `longitude` is outside its valid range.
+**Throws:** `TypeError` if the coordinate or either value has an invalid type, or
 if either value is not finite.
 
 ### `dmsToDecimal(dms)`
 
 Converts a `DMSCoordinate` to a decimal-degree `Coordinate`.
 
-**Throws:** `RangeError` if any DMS component is out of range.
+**Throws:** `RangeError` if any DMS component is out of range or degrees/minutes
+are not integers.
+**Throws:** `TypeError` if the DMS coordinate or a component has an invalid type,
+or if a direction is invalid.
 
 ### `Coordinate`
 
@@ -149,6 +153,15 @@ interface LongitudeDMS {
 - `seconds` must be in `[0, 60)`.
 - `latitude.degrees` must be in `[0, 90]`; combined value must not exceed 90°.
 - `longitude.degrees` must be in `[0, 180]`; combined value must not exceed 180°.
+
+## Upgrading from 1.x
+
+Version 2.0.0 uses [`@arijitgupta/geo-core`](https://www.npmjs.com/package/@arijitgupta/geo-core)
+for coordinate types, conversion, and validation. Review these behavior changes when upgrading:
+
+- DMS degrees and minutes must be integers; fractional seconds are still supported.
+- Invalid DMS directions and non-finite decimal coordinate values throw `TypeError`.
+- Converting a south/west DMS coordinate whose magnitude is zero now returns positive zero.
 
 ## Behavior
 
