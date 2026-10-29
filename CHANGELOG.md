@@ -7,6 +7,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Reuse coordinate types, conversion, validation, and geographic constants from
+  `@arijitgupta/geo-core` v1.0.0.
+- DMS validation now follows geo-core's rules: degrees and minutes must be integers,
+  invalid directions are rejected, and signed zero is normalized to zero.
+
 ## [1.1.0] — 2026-09-05
 
 ### Added

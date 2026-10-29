@@ -1,5 +1,10 @@
+import {
+    MEAN_EARTH_RADIUS_METERS,
+    RADIANS_PER_DEGREE,
+    dmsToDecimal,
+    validateCoordinate,
+} from "@arijitgupta/geo-core";
 import type { Coordinate, DMSCoordinate, DistanceUnit } from "./types.js";
-import { validateCoordinate, dmsToDecimal } from "./coordinate.js";
 
 const METERS_PER: Record<DistanceUnit, number> = {
     meters: 1,
@@ -11,7 +16,7 @@ const METERS_PER: Record<DistanceUnit, number> = {
 function isDMSCoordinate(
     coord: Coordinate | DMSCoordinate
 ): coord is DMSCoordinate {
-    return typeof coord.latitude === "object";
+    return typeof coord.latitude !== "number";
 }
 
 function normalize(coord: Coordinate | DMSCoordinate): Coordinate {
@@ -36,7 +41,8 @@ function normalize(coord: Coordinate | DMSCoordinate): Coordinate {
  * @param to - The destination coordinate.
  * @param unit - The unit for the returned distance. Defaults to `"meters"`.
  * @returns The estimated distance between the two coordinates in the requested unit.
- * @throws {TypeError} If `unit` is not a supported {@link DistanceUnit}.
+ * @throws {RangeError} If coordinate values are out of range or DMS degrees/minutes are not integers.
+ * @throws {TypeError} If coordinate fields are invalid or `unit` is unsupported.
  *
  * @example
  * ```ts
@@ -64,20 +70,19 @@ export function distanceBetween(
     to: Coordinate | DMSCoordinate,
     unit: DistanceUnit = "meters"
 ): number {
-    if (!(unit in METERS_PER)) {
+    if (!Object.hasOwn(METERS_PER, unit)) {
         throw new TypeError(`Unsupported distance unit: "${unit}"`);
     }
 
     const a = normalize(from);
     const b = normalize(to);
 
-    const earthRadius = 6_371_000;
+    const latitudeDifference = (b.latitude - a.latitude) * RADIANS_PER_DEGREE;
+    const longitudeDifference =
+        (b.longitude - a.longitude) * RADIANS_PER_DEGREE;
 
-    const latitudeDifference = (b.latitude - a.latitude) * (Math.PI / 180);
-    const longitudeDifference = (b.longitude - a.longitude) * (Math.PI / 180);
-
-    const fromLatitude = a.latitude * (Math.PI / 180);
-    const toLatitude = b.latitude * (Math.PI / 180);
+    const fromLatitude = a.latitude * RADIANS_PER_DEGREE;
+    const toLatitude = b.latitude * RADIANS_PER_DEGREE;
 
     const haversine =
         Math.sin(latitudeDifference / 2) ** 2 +
@@ -88,5 +93,5 @@ export function distanceBetween(
     const angularDistance =
         2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
 
-    return earthRadius * angularDistance * METERS_PER[unit];
+    return MEAN_EARTH_RADIUS_METERS * angularDistance * METERS_PER[unit];
 }

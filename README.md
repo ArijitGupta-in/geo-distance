@@ -3,8 +3,10 @@
 [![npm version](https://img.shields.io/npm/v/@arijitgupta/geo-distance)](https://www.npmjs.com/package/@arijitgupta/geo-distance)
 [![license](https://img.shields.io/npm/l/@arijitgupta/geo-distance)](https://opensource.org/licenses/MIT)
 
-A lightweight, dependency-free TypeScript utility for estimating the great-circle distance between two
-geographic coordinates using the Haversine formula.
+A lightweight TypeScript utility for estimating the great-circle distance between two
+geographic coordinates using the Haversine formula. Shared coordinate types,
+conversion, validation, and geographic constants are provided by
+[`@arijitgupta/geo-core`](https://www.npmjs.com/package/@arijitgupta/geo-core).
 
 Accepts coordinates in **decimal degrees** or **Degrees, Minutes, Seconds (DMS)** format.
 
@@ -87,9 +89,12 @@ Returns the estimated great-circle distance between two coordinates.
 
 **Returns:** `number` — distance in the requested unit.
 
-**Throws:** `RangeError` if a coordinate component is invalid (including non-finite
-decimal values, latitude outside `[-90, 90]`, longitude outside `[-180, 180]`, or
-an invalid DMS component).  
+**Throws:** `RangeError` if coordinate values are outside their valid geographic
+ranges, or if DMS degrees/minutes are not integers.
+
+**Throws:** `TypeError` if coordinate fields or DMS directions have invalid types,
+or if a decimal coordinate value is not finite.
+
 **Throws:** `TypeError` if `unit` is not a supported `DistanceUnit`.
 
 ### `validateCoordinate(coord)`
@@ -139,6 +144,7 @@ interface LongitudeDMS {
 
 **Validation rules:**
 
+- `degrees` and `minutes` must be integers.
 - `minutes` must be in `[0, 60)`.
 - `seconds` must be in `[0, 60)`.
 - `latitude.degrees` must be in `[0, 90]`; combined value must not exceed 90°.
@@ -151,7 +157,8 @@ interface LongitudeDMS {
     radius of `6,371,000` meters.
 - Accurate to within ~0.5% for most distances. Error increases at high latitudes due to Earth's oblate shape.
 - DMS coordinates are normalized to decimal degrees before the distance calculation.
-- Has no runtime dependencies.
+- Uses `@arijitgupta/geo-core` for shared coordinate types, validation, conversion,
+  and geographic constants.
 
 ## Development
 
