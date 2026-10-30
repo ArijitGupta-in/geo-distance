@@ -7,6 +7,41 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [Unreleased]
+
+## [2.1.0] — 2026-10-30
+
+### Added
+
+- `"nauticalMiles"` distance unit (1 nautical mile = 1852 m), added to `DistanceUnit`.
+- `pathLength(path, unit?)`: total length of a path of coordinates.
+- `distanceMatrix(from, to, unit?)`: distances from every coordinate in `from` to every coordinate in `to`.
+  Both batch helpers validate each coordinate once instead of once per pair.
+- `lint:md` and `test:coverage` scripts, `tsconfig.test.json`, and `vitest.config.ts` with an 80% coverage threshold,
+  all run in CI.
+- `publishConfig.access: "public"` in `package.json`.
+
+### Fixed
+
+- `distanceBetween` no longer returns `NaN` for some antipodal and near-antipodal points, where floating-point
+  rounding pushed the intermediate Haversine value slightly above 1. It now returns about half the Earth's circumference.
+
+### Changed
+
+- Coordinate handling uses `normalizeCoordinate` from `@arijitgupta/geo-core`, so `null` and other malformed
+  coordinates now throw geo-core's specific `TypeError` messages, consistent with the other packages.
+  Longitude `-180` is treated as `180`, which does not change distances.
+- `npm run check` now also type-checks the tests.
+- Source maps and declaration maps are no longer generated, because the published package does not include `src`.
+- CI uses `actions/checkout@v6` and `actions/setup-node@v6` with read-only `contents` permissions.
+
+### Internal
+
+- The Haversine calculation lives in an internal module shared by `distanceBetween` and the batch helpers, with the
+  latitude cosine computed once per coordinate.
+- The re-export tests were reduced to a smoke test; validation and conversion behavior is tested in geo-core.
+- Added the `Publish to npm` workflow for trusted publishing.
+
 ## [2.0.0] — 2026-10-30
 
 ### Breaking changes

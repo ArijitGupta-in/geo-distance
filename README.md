@@ -33,7 +33,27 @@ distanceBetween(from, to);               // ~111,195 meters (default)
 distanceBetween(from, to, "kilometers"); // ~111.195 km
 distanceBetween(from, to, "miles");      // ~69.09 miles
 distanceBetween(from, to, "feet");       // ~364,813 feet
+distanceBetween(from, to, "nauticalMiles"); // ~60.04 nautical miles
 ```
+
+### Paths and many-to-many distances
+
+```ts
+import { distanceMatrix, pathLength } from "@arijitgupta/geo-distance";
+
+const route = [
+    { latitude: 0, longitude: 0 },
+    { latitude: 0, longitude: 1 },
+    { latitude: 1, longitude: 1 },
+];
+
+pathLength(route, "kilometers"); // ~222.39 km along the whole route
+
+distanceMatrix(route, [{ latitude: 0, longitude: 0 }], "kilometers");
+// [[0], [~111.19], [~157.25]]
+```
+
+Both helpers validate each coordinate once, instead of once per pair.
 
 ### DMS coordinates
 
@@ -85,7 +105,7 @@ Returns the estimated great-circle distance between two coordinates.
 | `to` | `Coordinate \| DMSCoordinate` | — | Destination coordinate |
 | `unit` | `DistanceUnit` | `"meters"` | Output unit |
 
-**`DistanceUnit`:** `"meters"` \| `"kilometers"` \| `"miles"` \| `"feet"`
+**`DistanceUnit`:** `"meters"` \| `"kilometers"` \| `"miles"` \| `"feet"` \| `"nauticalMiles"`
 
 **Returns:** `number` — distance in the requested unit.
 
@@ -96,6 +116,34 @@ ranges, or if DMS degrees/minutes are not integers.
 or if a decimal coordinate value is not finite.
 
 **Throws:** `TypeError` if `unit` is not a supported `DistanceUnit`.
+
+### `pathLength(path, unit?)`
+
+Sums the great-circle distances between consecutive coordinates of `path`.
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `path` | `readonly (Coordinate \| DMSCoordinate)[]` | — | Ordered coordinates; formats may be mixed |
+| `unit` | `DistanceUnit` | `"meters"` | Output unit |
+
+**Returns:** `number` — total length in the requested unit. A path with fewer than two coordinates has length `0`.
+
+**Throws:** the same errors as `distanceBetween` for an invalid coordinate or `unit`, and `TypeError` if `path` is not
+an array. Every coordinate is validated, even in a single-coordinate path.
+
+### `distanceMatrix(from, to, unit?)`
+
+Computes the distance from every coordinate in `from` to every coordinate in `to`.
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `from` | `readonly (Coordinate \| DMSCoordinate)[]` | — | Origins; one row each |
+| `to` | `readonly (Coordinate \| DMSCoordinate)[]` | — | Destinations; one column each |
+| `unit` | `DistanceUnit` | `"meters"` | Output unit |
+
+**Returns:** `number[][]` — `result[i][j]` is the distance from `from[i]` to `to[j]`.
+
+**Throws:** the same errors as `pathLength`.
 
 ### `validateCoordinate(coord)`
 
@@ -170,16 +218,19 @@ for coordinate types, conversion, and validation. Review these behavior changes 
     radius of `6,371,000` meters.
 - Accurate to within ~0.5% for most distances. Error increases at high latitudes due to Earth's oblate shape.
 - DMS coordinates are normalized to decimal degrees before the distance calculation.
+- Near-antipodal points return a finite distance of about half the Earth's circumference.
 - Uses `@arijitgupta/geo-core` for shared coordinate types, validation, conversion,
   and geographic constants.
 
 ## Development
 
 ```bash
-npm install       # install dev dependencies
-npm test          # run tests with Vitest
-npm run check     # type-check without emitting output
-npm run build     # compile TypeScript to dist/
+npm install            # install dev dependencies
+npm test               # run tests with Vitest
+npm run test:coverage  # run tests and enforce the 80% coverage threshold
+npm run check          # type-check source and tests without emitting output
+npm run lint:md        # lint Markdown files
+npm run build          # compile TypeScript to dist/
 ```
 
 ## License
