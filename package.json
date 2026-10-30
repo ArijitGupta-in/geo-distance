@@ -22,11 +22,16 @@
     "files": [
         "dist"
     ],
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "build": "tsc",
         "test": "vitest run",
-        "check": "tsc --noEmit",
-        "prepublishOnly": "npm run check && npm test && npm run build"
+        "test:coverage": "vitest run --coverage",
+        "check": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+        "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
+        "prepublishOnly": "npm run check && npm run test:coverage && npm run build"
     },
     "keywords": [
         "geo",
@@ -42,6 +47,7 @@
         "kilometers",
         "miles",
         "feet",
+        "nautical-miles",
         "distance-conversion"
     ],
     "author": "Arijit Gupta",
@@ -50,6 +56,7 @@
         "@arijitgupta/geo-core": "^1.0.0"
     },
     "devDependencies": {
+        "@vitest/coverage-v8": "^4.1.11",
         "markdownlint-cli2": "^0.23.2",
         "typescript": "^7.0.2",
         "vitest": "^4.1.11"
