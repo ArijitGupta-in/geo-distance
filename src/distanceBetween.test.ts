@@ -238,4 +238,80 @@ describe("distanceBetween unit parameter", () => {
             distanceBetween(equatorA, equatorB, "nautical-miles" as never)
         ).toThrow(/nautical-miles/);
     });
+
+    it("returns nautical miles when unit is 'nauticalMiles'", () => {
+        const meters = distanceBetween(equatorA, equatorB, "meters");
+        const nauticalMiles = distanceBetween(
+            equatorA,
+            equatorB,
+            "nauticalMiles"
+        );
+        expect(nauticalMiles).toBeCloseTo(60.04, 1);
+        expect(nauticalMiles).toBeCloseTo(meters / 1852, 10);
+    });
+});
+
+describe("distanceBetween near-antipodal points", () => {
+    const halfCircumference = Math.PI * 6_371_000;
+
+    it("returns a finite half-circumference for a pair that rounds haversine above 1", () => {
+        const distance = distanceBetween(
+            { latitude: -7.38, longitude: -128.934 },
+            { latitude: 7.38, longitude: 51.066 }
+        );
+        expect(Number.isFinite(distance)).toBe(true);
+        expect(distance).toBeCloseTo(halfCircumference, 0);
+    });
+
+    it("is finite and about half the circumference for exact antipodes", () => {
+        const pairs: [number, number][] = [
+            [0, 0],
+            [90, 0],
+            [-90, 45],
+            [7.38, 51.066],
+            [-33.8688, 151.2093],
+            [22.5726, 88.3639],
+            [45.1, -122.987654],
+            [-12.345678, 179.999999],
+        ];
+        for (const [latitude, longitude] of pairs) {
+            const antipodeLongitude =
+                longitude > 0 ? longitude - 180 : longitude + 180;
+            const distance = distanceBetween(
+                { latitude, longitude },
+                { latitude: -latitude, longitude: antipodeLongitude }
+            );
+            expect(Number.isFinite(distance)).toBe(true);
+            expect(distance).toBeCloseTo(halfCircumference, 0);
+        }
+    });
+});
+
+describe("distanceBetween input validation", () => {
+    it("throws TypeError for null and non-object coordinates", () => {
+        expect(() => distanceBetween(null as never, equatorB)).toThrow(
+            TypeError
+        );
+        expect(() => distanceBetween(equatorA, "x" as never)).toThrow(
+            TypeError
+        );
+    });
+
+    it("throws RangeError for out-of-range decimal coordinates", () => {
+        expect(() =>
+            distanceBetween({ latitude: 91, longitude: 0 }, equatorB)
+        ).toThrow(RangeError);
+    });
+
+    it("treats longitude -180 and 180 as the same point", () => {
+        const west = distanceBetween(
+            { latitude: 10, longitude: -180 },
+            equatorA
+        );
+        const east = distanceBetween(
+            { latitude: 10, longitude: 180 },
+            equatorA
+        );
+        expect(west).toBeCloseTo(east, 6);
+    });
 });

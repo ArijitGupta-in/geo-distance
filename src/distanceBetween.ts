@@ -1,31 +1,5 @@
-import {
-    MEAN_EARTH_RADIUS_METERS,
-    RADIANS_PER_DEGREE,
-    dmsToDecimal,
-    validateCoordinate,
-} from "@arijitgupta/geo-core";
+import { metersBetween, preparePoint, unitsPerMeter } from "./haversine.js";
 import type { Coordinate, DMSCoordinate, DistanceUnit } from "./types.js";
-
-const METERS_PER: Record<DistanceUnit, number> = {
-    meters: 1,
-    kilometers: 1e-3,
-    miles: 1 / 1609.344,
-    feet: 1 / 0.3048,
-};
-
-function isDMSCoordinate(
-    coord: Coordinate | DMSCoordinate
-): coord is DMSCoordinate {
-    return typeof coord.latitude !== "number";
-}
-
-function normalize(coord: Coordinate | DMSCoordinate): Coordinate {
-    if (isDMSCoordinate(coord)) {
-        return dmsToDecimal(coord);
-    }
-    validateCoordinate(coord);
-    return coord;
-}
 
 /**
  * Estimates the great-circle distance between two geographic coordinates in meters.
@@ -53,6 +27,7 @@ function normalize(coord: Coordinate | DMSCoordinate): Coordinate {
  * distanceBetween(from, to, "kilometers"); // ~111.195 km
  * distanceBetween(from, to, "miles");      // ~69.11 miles
  * distanceBetween(from, to, "feet");       // ~364,879 feet
+ * distanceBetween(from, to, "nauticalMiles"); // ~60.04 nautical miles
  * ```
  *
  * @example
@@ -70,28 +45,6 @@ export function distanceBetween(
     to: Coordinate | DMSCoordinate,
     unit: DistanceUnit = "meters"
 ): number {
-    if (!Object.hasOwn(METERS_PER, unit)) {
-        throw new TypeError(`Unsupported distance unit: "${unit}"`);
-    }
-
-    const a = normalize(from);
-    const b = normalize(to);
-
-    const latitudeDifference = (b.latitude - a.latitude) * RADIANS_PER_DEGREE;
-    const longitudeDifference =
-        (b.longitude - a.longitude) * RADIANS_PER_DEGREE;
-
-    const fromLatitude = a.latitude * RADIANS_PER_DEGREE;
-    const toLatitude = b.latitude * RADIANS_PER_DEGREE;
-
-    const haversine =
-        Math.sin(latitudeDifference / 2) ** 2 +
-        Math.cos(fromLatitude) *
-            Math.cos(toLatitude) *
-            Math.sin(longitudeDifference / 2) ** 2;
-
-    const angularDistance =
-        2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
-
-    return MEAN_EARTH_RADIUS_METERS * angularDistance * METERS_PER[unit];
+    const factor = unitsPerMeter(unit);
+    return metersBetween(preparePoint(from), preparePoint(to)) * factor;
 }

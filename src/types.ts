@@ -8,4 +8,5 @@ export type {
 } from "@arijitgupta/geo-core";
 
 /** Supported units for distance output from distanceBetween. */
-export type DistanceUnit = "meters" | "kilometers" | "miles" | "feet";
+export type DistanceUnit =
+    "meters" | "kilometers" | "miles" | "feet" | "nauticalMiles";
