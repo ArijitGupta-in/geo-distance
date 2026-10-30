@@ -14,4 +14,5 @@ export type {
     DistanceUnit,
 } from "./types.js";
 export { distanceBetween } from "./distanceBetween.js";
+export { distanceMatrix, pathLength } from "./batch.js";
 export { validateCoordinate, dmsToDecimal } from "./coordinate.js";
