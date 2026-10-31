@@ -25,8 +25,8 @@ import type { Coordinate, DMSCoordinate, DistanceUnit } from "./types.js";
  * const to: Coordinate = { latitude: 0, longitude: 1 };
  * distanceBetween(from, to);               // ~111,195 meters
  * distanceBetween(from, to, "kilometers"); // ~111.195 km
- * distanceBetween(from, to, "miles");      // ~69.11 miles
- * distanceBetween(from, to, "feet");       // ~364,879 feet
+ * distanceBetween(from, to, "miles");      // ~69.09 miles
+ * distanceBetween(from, to, "feet");       // ~364,813 feet
  * distanceBetween(from, to, "nauticalMiles"); // ~60.04 nautical miles
  * ```
  *
